@@ -127,7 +127,7 @@ npx nodemon index.js
   _**On success**_ - Returned HTTP status 200. Also returned the updated user document.
   _**On error**_ - Returned a suitable error message with a valid HTTP status code.
   
-  ````````````````````````````````````````````````````````````````
+````````````````````````````````````````````````````````````````
   {
     "status": false,
     "data": {
@@ -143,8 +143,14 @@ npx nodemon index.js
         "__v": 0
     }
 }
+````````````````````````````````````````````````````````````````
 
-`````````````````````````````````````````````````````````````````````
+### Authentication and Authorization
+- Created a middleware to add Authencation and Authorization function.
+- User to protect routes of Update and Get Api.
+- Only the Authorised User can update his details.
+- In case of unauthorized access, returned an appropriate error message.
+
 
 
 
