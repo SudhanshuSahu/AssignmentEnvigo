@@ -47,4 +47,11 @@ let isValidMobile = function (number) {
     return mobileRegex.test(number);
 }
 
-module.exports = {isValidRequestBody,isValid,isValidObjectId,isValidEmail,isValidName,isValidPassword,isValidMobile} 
+//image validation (should be png , jpeg or jpg)
+const isValidimg= (img) =>{
+    const reg = /image\/png|image\/jpeg|image\/jpg/;
+    return reg.test(img)
+}
+
+
+module.exports = {isValidRequestBody,isValid,isValidObjectId,isValidEmail,isValidName,isValidPassword,isValidMobile,isValidimg} 

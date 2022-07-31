@@ -12,6 +12,7 @@ const {
   isValidName,
   isValidPassword,
   isValidMobile,
+  isValidimg,
 } = require("../validators/validator");
 
 //Create Api function to create and store the data of user
@@ -36,12 +37,10 @@ const createUser = async function (req, res) {
     }
     //check if first name is in alphabets or not
     if (!isValidName(fname)) {
-      return res
-        .status(400)
-        .send({
-          status: false,
-          message: "First name should contain alphabets Only",
-        });
+      return res.status(400).send({
+        status: false,
+        message: "First name should contain alphabets Only",
+      });
     }
     //Validating mandatory field of last name
     if (!isValid(lname)) {
@@ -51,12 +50,10 @@ const createUser = async function (req, res) {
     }
     //check if Last name is in alphabets or not
     if (!isValidName(lname)) {
-      return res
-        .status(400)
-        .send({
-          status: false,
-          message: "Last name should contain alphabet Only",
-        });
+      return res.status(400).send({
+        status: false,
+        message: "Last name should contain alphabet Only",
+      });
     }
 
     //Validating mandatory field of email
@@ -87,13 +84,11 @@ const createUser = async function (req, res) {
         .send({ status: false, message: "password is mandatory" });
     }
     if (!isValidPassword(password)) {
-      return res
-        .status(400)
-        .send({
-          status: false,
-          message:
-            "password should contain at least a number and a special character and Should be of length from 8 to 14",
-        });
+      return res.status(400).send({
+        status: false,
+        message:
+          "password should contain at least a number and a special character and Should be of length from 8 to 14",
+      });
     }
 
     //password encryption for security
@@ -120,10 +115,18 @@ const createUser = async function (req, res) {
 
     //files from data
     let files = req.files;
-    
+
+    //validating image (image should be in png,jpeg or jpg format)
+    if (!isValidimg(files[0].mimetype))
+      return res
+        .status(400)
+        .send({
+          status: false,
+          msg: "Please Provide Valid Image Files in Format of [ jpg , jpeg ,png ]",
+        });
+
     //uploading the profile picture in aws s3 bucket and set the url of image in profileImage field
     if (files && files.length > 0) {
-     
       let uploadedFileURL = await uploadFile(files[0]);
 
       requestBody.profileImage = uploadedFileURL;
@@ -218,8 +221,6 @@ const loginUser = async function (req, res) {
   }
 };
 
-
-
 //------------------------------------------------------------------------------------------------------------------------------------------------------
 
 //***************************Update user API function **********************/
@@ -234,7 +235,7 @@ const updateUser = async function (req, res) {
         .status(400)
         .send({ status: false, message: `Id ${id} is not valid` });
     }
-    
+
     let data = req.body;
 
     // checking if request body is empty or not
@@ -243,36 +244,29 @@ const updateUser = async function (req, res) {
         .status(400)
         .send({ status: false, message: "Data for updation is empty" });
     }
-   
 
-    //destructuring 
+    //destructuring
     let { fname, lname, email, phone } = data;
-
 
     //checking if fname should be in alphabets or not
     if (fname) {
       if (!isValidName(fname)) {
-        return res
-          .status(400)
-          .send({
-            status: false,
-            message: "First name should be in alphabets only",
-          });
+        return res.status(400).send({
+          status: false,
+          message: "First name should be in alphabets only",
+        });
       }
     }
 
     //checking if lname should be in alphabets or not
     if (lname) {
       if (!isValidName(lname)) {
-        return res
-          .status(400)
-          .send({
-            status: false,
-            message: "Last name should be in alphabets only",
-          });
+        return res.status(400).send({
+          status: false,
+          message: "Last name should be in alphabets only",
+        });
       }
     }
-
 
     // checking if email is valid or not
     if (email) {
@@ -300,9 +294,19 @@ const updateUser = async function (req, res) {
         .status(400)
         .send({ status: false, message: "Phone number is already Present" });
     }
-  
+
     //checking if file is coming
     let files = req.files;
+
+    //validating image (image should be in png,jpeg or jpg format)
+    if (!isValidimg(files[0].mimetype))
+      return res
+        .status(400)
+        .send({
+          status: false,
+          msg: "Please Provide Valid Image Files in Format of [ jpg , jpeg ,png ]",
+        });
+
     if (files && files.length > 0) {
       //uploading file
       let uploadedFileURL = await uploadFile(files[0]);
@@ -316,20 +320,16 @@ const updateUser = async function (req, res) {
     );
 
     if (!updateData) {
-      return res
-        .status(404)
-        .send({
-          status: false,
-          message: `Document with Id : ${id} is not found`,
-        });
+      return res.status(404).send({
+        status: false,
+        message: `Document with Id : ${id} is not found`,
+      });
     }
     return res.status(200).send({ status: true, data: updateData });
   } catch (error) {
     return res.status(500).send({ status: false, message: error.message });
   }
 };
-
-
 
 //------------------------------------------------------------------------------------------------------------------------------------------------------
 
@@ -349,12 +349,10 @@ const getUserProfile = async function (req, res) {
 
     //If data no found
     if (!getData) {
-      return res
-        .status(404)
-        .send({
-          status: false,
-          message: `Document Associated with id ${id} not found`,
-        });
+      return res.status(404).send({
+        status: false,
+        message: `Document Associated with id ${id} not found`,
+      });
     }
     return res.status(200).send({ status: false, data: getData });
   } catch (error) {
@@ -362,8 +360,6 @@ const getUserProfile = async function (req, res) {
   }
 };
 
-
-
 //------------------------------------------------------------------------------------------------------------------------------------------------------
 
-module.exports = { createUser, loginUser, updateUser, getUserProfile};
+module.exports = { createUser, loginUser, updateUser, getUserProfile };
