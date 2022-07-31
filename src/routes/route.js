@@ -17,7 +17,7 @@ router.post("/signup",createUser)
 // if api is invalid OR wrong URL
 router.all("/*", function (req, res) {
     res
-      .status(404)
+      .status(400)
       .send({ status: false, message: "The api you requested is not available" });
   });
   

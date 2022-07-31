@@ -50,7 +50,7 @@ const createUser = async function (req, res) {
         .send({ status: false, message: "Last name is mandatory" });
     }
     //check if Last name is in alphabets or not
-    if (!isValidName) {
+    if (!isValidName(lname)) {
       return res
         .status(400)
         .send({
@@ -234,16 +234,22 @@ const updateUser = async function (req, res) {
         .status(400)
         .send({ status: false, message: `Id ${id} is not valid` });
     }
-
+    
     let data = req.body;
+
+    // checking if request body is empty or not
     if (!isValidRequestBody(data)) {
       return res
         .status(400)
-        .send({ status: false, message: "Data is for updation is empty" });
+        .send({ status: false, message: "Data for updation is empty" });
     }
+   
 
+    //destructuring 
     let { fname, lname, email, phone } = data;
 
+
+    //checking if fname should be in alphabets or not
     if (fname) {
       if (!isValidName(fname)) {
         return res
@@ -254,6 +260,8 @@ const updateUser = async function (req, res) {
           });
       }
     }
+
+    //checking if lname should be in alphabets or not
     if (lname) {
       if (!isValidName(lname)) {
         return res
@@ -265,6 +273,8 @@ const updateUser = async function (req, res) {
       }
     }
 
+
+    // checking if email is valid or not
     if (email) {
       if (!isValidEmail(email)) {
         return res
