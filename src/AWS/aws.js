@@ -1,5 +1,4 @@
 const aws= require("aws-sdk")
-const userModel = require("../models/userModel")
 
 aws.config.update({
     accessKeyId: "AKIAY3L35MCRUJ6WPO6J",
