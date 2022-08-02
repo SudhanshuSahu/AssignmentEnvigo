@@ -64,7 +64,7 @@ const authorisation = async function (req, res, next) {
         });
       }
   
-      // Authorisation: userId in token is compared with userId against bookId
+      // Authorisation: userId in token is compared with ObjectID of user
       if (req.userId !== userId) {
         return res.status(403).send({
           status: false,
